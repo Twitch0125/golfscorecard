@@ -8,5 +8,10 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {}
+  "dependencies": {},
+  "devDependencies": {
+    "bootstrap": "^4.3.1",
+    "jquery": "^3.3.1",
+    "jqueryui": "^1.11.1"
+  }
 }
