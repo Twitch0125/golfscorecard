@@ -3,6 +3,10 @@ var courses = new Array();
 var selectedCourse = {};
 
 function main() {
+  showCourses();
+}
+
+function showCourses() {
   //code to run that depends on API generated content
   getCourses().then(coursesAPI => {
     console.log(coursesAPI);
@@ -11,17 +15,25 @@ function main() {
 
     for (let i = 0; i < courses.length; i++) {
       $(".course-card-container").append(`
-        <div id="mdl-card-${i}" onclick='showPlayers(${
+      <div id="mdl-card-${i}" onclick='showPlayers(${
         courses[i].id
       })' class="mdl-card-image mdl-card mdl-shadow--6dp">
-        <div class="mdl-card__title mdl-card--expand"></div>
-        <div class="mdl-card__actions mdl-card--border">
-        <span class="mdl-card-image__filename">${courses[i].name}</span>
-        </div>
-        </div>
-        `);
+      <div class="mdl-card__title mdl-card--expand"></div>
+      <div class="mdl-card__actions mdl-card--border">
+      <span class="mdl-card-image__filename">${courses[i].name}</span>
+      </div>
+      </div>
+      `);
+      //animate new courses
       $(`#mdl-card-${i}`).css("background", `url(${courses[i].image})`);
       $(`#mdl-card-${i}`).on("click", function(e = courses[i]) {
+        $(`#mdl-card-${i}`).effect(
+          "drop",
+          {
+            direction: "right"
+          },
+          450
+        );
         console.log(e);
       });
     }
@@ -33,13 +45,7 @@ function main() {
 //function that will show the player creation area after a course is selected
 function showPlayers(courseId) {
   selectedCourse.id = courseId;
-  $(".course-selection-title").effect(
-    "drop",
-    {
-      direction: "left"
-    },
-    450
-  );
+  $(".course-selection-title").effect("drop", {}, 450);
   $(".course-card-container").effect("drop", {}, 450, function() {
     $(".player-creation").show(
       "drop",
@@ -84,20 +90,95 @@ function getCourse(id) {
 
 //will add a player to the player-list element
 //gets player name from the #player-textfield element
+//maximum of 4 players in the list
 function addPlayer() {
-  $(".player-list").append(`
-<li class="mdl-list__item">
+  let textFieldValue = $("#player-textfield").val();
+  //replace space characters with dashes
+  //this is needed since the value is later used in an ID, and spaces are CSS selectors
+  textFieldValue = textFieldValue.replace(" ", "-");
+
+  //check for duplicate names
+  if (textFieldValue == $(`.player-list #${textFieldValue}`).attr("id")) {
+    //shake exisiting name
+    $(`.player-list #${textFieldValue}`).effect(
+      "shake",
+      {
+        distance: 13,
+        times: 2
+      },
+      450
+    );
+    return 0;
+  }
+
+  //check if theres 4 players already
+  if ($(".player-list li").length >= 4) {
+    //shake #playerTotal
+    $(`#playerTotal`).effect(
+      "shake",
+      {
+        distance: 13,
+        times: 2
+      },
+      450
+    );
+    return 0;
+  } else {
+    $(".player-list").append(`
+<li id="${textFieldValue}" class="mdl-list__item mdl-shadow--2dp">
   <span class="mdl-list__item-primary-content">
     <i class="material-icons mdl-list__item-avatar">
       person
     </i>
-    <span class="player">${$('#player-textfield').val()}</span>
-    <a class="mdl-list__item-secondary-action" href='#'><i class="material-icons mdl-list__item-icon">
-        delete_outline
-      </i></a>
+    <span>${textFieldValue}</span>
   </span>
+  <a onclick="deletePlayer('${textFieldValue}')" class="mdl-list__item-secondary-action"><i
+      class="material-icons mdl-list__item-icon">
+      delete_outline
+    </i></a>
 </li>
 `);
+    //animate new list items
+    $(`#${textFieldValue}`).hide();
+    $(`#${textFieldValue}`).show(
+      "drop",
+      {
+        direction: "right"
+      },
+      450
+    );
+    console.log(textFieldValue);
+
+    //update #playerTotal
+    updatePlayerTotal();
+  }
+}
+
+//function that updates the player total
+function updatePlayerTotal() {
+  //update #playerTotal element
+  $("#playerTotal").html(`
+  ${$(".player-list .mdl-list__item").length}/4 Players
+  `);
+  // do a little shake to show it was updated
+  $("#playerTotal").effect(
+    "shake",
+    {
+      direction: "up",
+      distance: 1,
+      times: 1
+    },
+    450
+  );
+}
+
+//function that takes a player from the player list and removes it
+function deletePlayer(player) {
+  $(`#${player}`).hide("drop", {}, 450, function() {
+    $(`#${player}`).remove();
+    //update player total
+    updatePlayerTotal();
+  });
 }
 
 //function to check the keyUp event that was passed to it
