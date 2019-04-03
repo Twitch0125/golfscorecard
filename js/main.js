@@ -133,10 +133,10 @@ function addPlayer() {
     </i>
     <span>${textFieldValue}</span>
   </span>
-  <a onclick="deletePlayer('${textFieldValue}')" class="mdl-list__item-secondary-action"><i
-      class="material-icons mdl-list__item-icon">
-      delete_outline
-    </i></a>
+  <button onclick='deletePlayer("${textFieldValue}")'
+  class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect mdl-button--colored mdl-list__item-secondary-action">
+  <i class="material-icons">delete_outline</i>
+</button>
 </li>
 `);
     //animate new list items
