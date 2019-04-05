@@ -96,7 +96,7 @@ function addPlayer() {
   let textFieldValue = $("#player-textfield").val();
   //replace space characters with dashes
   //this is needed since the value is later used in an ID, and spaces are CSS selectors
-  textFieldValue = textFieldValue.replace(" ", "-");
+  textFieldValue = textFieldValue.replace(/ /g, "-");
 
   //check for duplicate names
   if (textFieldValue == $(`.player-list #${textFieldValue}`).attr("id")) {
@@ -152,6 +152,11 @@ function addPlayer() {
 
     //update #playerTotal
     updatePlayerTotal();
+
+    $('#player-textfield').val('');
+    $('#player-textfield').blur();
+    $('.mdl-textfield').removeClass("is-focused");
+    $('.mdl-textfield').removeClass("is-dirty");
   }
 }
 
