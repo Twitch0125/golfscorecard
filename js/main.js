@@ -41,6 +41,7 @@ function showCourses() {
   });
 
   $(".player-creation").hide();
+  $(".score-card").hide();
 }
 
 //function that will show the player creation area after a course is selected
