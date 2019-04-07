@@ -18,7 +18,7 @@ function showCourses() {
       $(".course-card-container").append(`
       <div id="mdl-card-${i}" onclick='showPlayers(${
         courses[i].id
-        })' class="mdl-card-image mdl-card mdl-shadow--6dp">
+      })' class="mdl-card-image mdl-card mdl-shadow--6dp">
       <div class="mdl-card__title mdl-card--expand"></div>
       <div class="mdl-card__actions mdl-card--border">
       <span class="mdl-card-image__filename">${courses[i].name}</span>
@@ -27,7 +27,7 @@ function showCourses() {
       `);
       //animate new courses
       $(`#mdl-card-${i}`).css("background", `url(${courses[i].image})`);
-      $(`#mdl-card-${i}`).on("click", function (e = courses[i]) {
+      $(`#mdl-card-${i}`).on("click", function(e = courses[i]) {
         $(`#mdl-card-${i}`).effect(
           "drop",
           {
@@ -48,7 +48,7 @@ function showCourses() {
 function showPlayers(courseId) {
   selectedCourse.id = courseId;
   $(".course-selection-title").effect("drop", {}, 450);
-  $(".course-card-container").effect("drop", {}, 450, function () {
+  $(".course-card-container").effect("drop", {}, 450, function() {
     $(".player-creation").show(
       "drop",
       {
@@ -59,12 +59,26 @@ function showPlayers(courseId) {
   });
 }
 
+function showTable() {
+  $(".player-creation-title").effect("drop", {}, 450);
+  $(".player-creation-container").effect("drop", {}, 450, function(){
+    $(".score-card").show(
+      "drop",
+      {
+        direction: "right"
+      },
+      450
+    );
+  });
+
+}
+
 //returns a promise with the Courses object
 function getCourses() {
   return new Promise((resolve, reject) => {
     var xhr = new XMLHttpRequest();
     xhr.open("GET", `https://golf-courses-api.herokuapp.com/courses/`);
-    xhr.onreadystatechange = function () {
+    xhr.onreadystatechange = function() {
       if (this.readyState === 4 && this.status === 200) {
         resolve(JSON.parse(this.responseText));
       }
@@ -80,7 +94,7 @@ function getCourse(id) {
   return new Promise((resolve, reject) => {
     var xhr = new XMLHttpRequest();
     xhr.open("GET", `https://golf-courses-api.herokuapp.com/courses/${id}`);
-    xhr.onreadystatechange = function () {
+    xhr.onreadystatechange = function() {
       if (this.readyState === 4 && this.status === 200) {
         resolve(JSON.parse(this.responseText));
       }
@@ -154,10 +168,10 @@ function addPlayer() {
     //update #playerTotal
     updatePlayerTotal();
 
-    $('#player-textfield').val('');
-    $('#player-textfield').blur();
-    $('.mdl-textfield').removeClass("is-focused");
-    $('.mdl-textfield').removeClass("is-dirty");
+    $("#player-textfield").val("");
+    $("#player-textfield").blur();
+    $(".mdl-textfield").removeClass("is-focused");
+    $(".mdl-textfield").removeClass("is-dirty");
   }
 }
 
@@ -181,7 +195,7 @@ function updatePlayerTotal() {
 
 //function that takes a player from the player list and removes it
 function deletePlayer(player) {
-  $(`#${player}`).hide("drop", {}, 450, function () {
+  $(`#${player}`).hide("drop", {}, 450, function() {
     $(`#${player}`).remove();
     //update player total
     updatePlayerTotal();
