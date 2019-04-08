@@ -40,8 +40,16 @@ h3{
 
 .score-card-table{
    overflow:auto;
+   margin-bottom: 25px;
 }
 
 .score-textfield{
   width: 100px;
 }
+
+@media (max-width:888px){
+  .score-card-table{
+    max-width: 325px;
+  }
+}
+
