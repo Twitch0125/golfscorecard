@@ -21,6 +21,8 @@
 
 <body>
     <div class="mdl-layout mdl-js-layout container">
+        <!-- spinner -->
+        <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
         <div class="course-selection course-selection-title title">
             <h1>
                 <!-- header for course cards list -->
@@ -68,6 +70,23 @@
                 Thanksgiving Point
             </h1>
         </div>
+        <div class="score-card tee-select">
+            <!-- modal for changing course selection at the table -->
+            <button id="change-course-dialog" type="button" class="mdl-button">Change Course</button>
+            <dialog class="mdl-dialog">
+                <h4 class="mdl-dialog__title">Select a Course</h4>
+                <div class="mdl-dialog__content">
+
+                </div>
+                <div class="mdl-dialog__actions">
+                    <button onclick="showTable()"
+                        class="mdl-button close mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored">
+                        GO!
+                    </button>
+                </div>
+            </dialog>
+
+        </div>
         <div class="score-card score-card-table mdl-shadow--24dp">
             <table class="mdl-data-table mdl-js-data-table">
                 <thead>
@@ -98,6 +117,8 @@
 
     </div>
 
+
+
     <!-- navigation -->
     <footer>
 
@@ -106,5 +127,3 @@
 </body>
 
 </html>
-
-

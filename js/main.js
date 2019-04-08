@@ -3,14 +3,21 @@ var courses = new Array();
 var selectedCourse = {};
 var players = [];
 
-
 function main() {
   //load courses when API info is retrieved
-  showCourses();
+  $(".course-card-container").hide();
+  $(".course-selection-title").hide();
+  $(".player-creation").hide();
+  $(".score-card").hide();
+  //the timeout just keeps the spinner up for half a second... I think it feels nicer than the courses plopping into existance
+  setTimeout(function(){showCourses();}, 500);
+
 }
 
 function showCourses() {
   //code to run that depends on API generated content
+  $(".mdl-spinner").hide("fade", {}, 250);
+
   getCourses().then(coursesAPI => {
     console.log(coursesAPI);
     courses = coursesAPI.courses;
@@ -42,8 +49,10 @@ function showCourses() {
     }
   });
 
-  $(".player-creation").hide();
-  $(".score-card").hide();
+  $(".course-selection-title").show("fade", {}, 750);
+  $(".course-card-container").show("fade", {}, 750);
+
+
 }
 
 //function that will show the player creation area after a course is selected
@@ -78,14 +87,14 @@ function showTable() {
   // load course name
   $(".score-card h1").html(`${selectedCourse.data.name}`);
   //load player names into the table
-  for(let i = 0; i < players.length; i++){
+  for (let i = 0; i < players.length; i++) {
     $(".table-head").append(`
     <th>${players[i]}'s score</th>
-      `)
-      $(".table-totals").append(`<th id="${players[i]}-total"></th>`)
+      `);
+    $(".table-totals").append(`<th id="${players[i]}-total"></th>`);
   }
   //load each hole's number, yardage, handicap, and PAR
-  for(let i = 0; i < selectedCourse.data.holeCount; i++){
+  for (let i = 0; i < selectedCourse.data.holeCount; i++) {
     //var for current hole in loop
     let curHole = selectedCourse.data.holes[i];
     //variable for the hole number
@@ -98,31 +107,41 @@ function showTable() {
     let holePar = curHole.teeBoxes[0].par;
 
     //insert values into the table
-    $('.table-body').append(`
+    $(".table-body").append(`
     <tr>
       <td class="mdl-data-table__cell--non-numeric">${holeNum}</td>
       <td class="mdl-data-table__cell--non-numeric">${holeYardage}</td>
       <td class="mdl-data-table__cell--non-numeric">${holeHCP}</td>
       <td class="mdl-data-table__cell--non-numeric">${holePar}</td>
     </tr>
-      `)
-    }
-        //add textfields for each player
-        for(let i = 0; i < players.length; i++){
-          $(".table-body tr").append(`
+      `);
+  }
+  //add textfields for each player
+  for (let i = 0; i < players.length; i++) {
+    $(".table-body tr").append(`
           <td class="mdl-data-table__cell--non-numeric">
             <div class="mdl-textfield mdl-js-textfield score-textfield">
-              <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="${players[i]}Score">
-              <label class="mdl-textfield__label" for="${players[i]}Score">Score...</label>
+              <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="${
+                players[i]
+              }Score">
+              <label class="mdl-textfield__label" for="${
+                players[i]
+              }Score">Score...</label>
               <span class="mdl-textfield__error">Input is not a number!</span>
             </div>
           </td>
-            `)
-        } 
-    componentHandler.upgradeDom();
+            `);
+  }
+  var dialog = document.querySelector('dialog');
+  var showDialogButton = document.querySelector('#change-course-dialog');
+  showDialogButton.addEventListener('click', function(){
+    dialog.showModal();
+  });
+  dialog.querySelector('.close').addEventListener('click', function(){
+    dialog.close();
+  })
+  componentHandler.upgradeDom();
 }
-
-
 
 //returns a promise with the Courses object
 function getCourses() {
@@ -249,8 +268,8 @@ function updatePlayerTotal() {
 function deletePlayer(player) {
   $(`#${player}`).hide("drop", {}, 450, function() {
     //remove from players[]
-    for(let i = 0; i < players.length; i++){
-      if(players[i] == player){
+    for (let i = 0; i < players.length; i++) {
+      if (players[i] == player) {
         players.splice(i, 1);
       }
     }
@@ -264,7 +283,7 @@ function deletePlayer(player) {
 //also is given the element of where it was called just so we can be extra specific
 function checkKey(event, id) {
   switch (event.key) {
-    case "Enter":    
+    case "Enter":
       // if Enter was hit on the #player-textfield element
       // call addPlayer() which will add a player to the player-list element
       if (id === "player-textfield") {
