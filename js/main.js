@@ -1,6 +1,8 @@
 //global variables to store courses
 var courses = new Array();
 var selectedCourse = {};
+var players = [];
+
 
 function main() {
   //load courses when API info is retrieved
@@ -46,7 +48,10 @@ function showCourses() {
 
 //function that will show the player creation area after a course is selected
 function showPlayers(courseId) {
-  selectedCourse.id = courseId;
+  //get the course that was selected
+  getCourse(courseId).then(course => {
+    selectedCourse = course;
+  });
   $(".course-selection-title").effect("drop", {}, 450);
   $(".course-card-container").effect("drop", {}, 450, function() {
     $(".player-creation").show(
@@ -61,7 +66,7 @@ function showPlayers(courseId) {
 
 function showTable() {
   $(".player-creation-title").effect("drop", {}, 450);
-  $(".player-creation-container").effect("drop", {}, 450, function(){
+  $(".player-creation-container").effect("drop", {}, 450, function() {
     $(".score-card").show(
       "drop",
       {
@@ -70,8 +75,54 @@ function showTable() {
       450
     );
   });
+  // load course name
+  $(".score-card h1").html(`${selectedCourse.data.name}`);
+  //load player names into the table
+  for(let i = 0; i < players.length; i++){
+    $(".table-head").append(`
+    <th>${players[i]}'s score</th>
+      `)
+      $(".table-totals").append(`<th id="${players[i]}-total"></th>`)
+  }
+  //load each hole's number, yardage, handicap, and PAR
+  for(let i = 0; i < selectedCourse.data.holeCount; i++){
+    //var for current hole in loop
+    let curHole = selectedCourse.data.holes[i];
+    //variable for the hole number
+    let holeNum = curHole.hole;
+    //variable for the yardage. only going off the first teeBox...for now
+    let holeYardage = curHole.teeBoxes[0].yards;
+    //variable for handicap
+    let holeHCP = curHole.teeBoxes[0].hcp;
+    //variable for PAR
+    let holePar = curHole.teeBoxes[0].par;
 
+    //insert values into the table
+    $('.table-body').append(`
+    <tr>
+      <td class="mdl-data-table__cell--non-numeric">${holeNum}</td>
+      <td class="mdl-data-table__cell--non-numeric">${holeYardage}</td>
+      <td class="mdl-data-table__cell--non-numeric">${holeHCP}</td>
+      <td class="mdl-data-table__cell--non-numeric">${holePar}</td>
+    </tr>
+      `)
+    }
+        //add textfields for each player
+        for(let i = 0; i < players.length; i++){
+          $(".table-body tr").append(`
+          <td class="mdl-data-table__cell--non-numeric">
+            <div class="mdl-textfield mdl-js-textfield score-textfield">
+              <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="${players[i]}Score">
+              <label class="mdl-textfield__label" for="${players[i]}Score">Score...</label>
+              <span class="mdl-textfield__error">Input is not a number!</span>
+            </div>
+          </td>
+            `)
+        } 
+    componentHandler.upgradeDom();
 }
+
+
 
 //returns a promise with the Courses object
 function getCourses() {
@@ -166,6 +217,7 @@ function addPlayer() {
     console.log(textFieldValue);
 
     //update #playerTotal
+    players.push(textFieldValue);
     updatePlayerTotal();
 
     $("#player-textfield").val("");
@@ -196,6 +248,12 @@ function updatePlayerTotal() {
 //function that takes a player from the player list and removes it
 function deletePlayer(player) {
   $(`#${player}`).hide("drop", {}, 450, function() {
+    //remove from players[]
+    for(let i = 0; i < players.length; i++){
+      if(players[i] == player){
+        players.splice(i, 1);
+      }
+    }
     $(`#${player}`).remove();
     //update player total
     updatePlayerTotal();
@@ -206,7 +264,7 @@ function deletePlayer(player) {
 //also is given the element of where it was called just so we can be extra specific
 function checkKey(event, id) {
   switch (event.key) {
-    case "Enter":
+    case "Enter":    
       // if Enter was hit on the #player-textfield element
       // call addPlayer() which will add a player to the player-list element
       if (id === "player-textfield") {

@@ -38,3 +38,10 @@ h3{
   /* color: #434371; */
 }
 
+.score-card-table{
+   overflow:auto;
+}
+
+.score-textfield{
+  width: 100px;
+}
