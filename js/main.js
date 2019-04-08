@@ -10,8 +10,9 @@ function main() {
   $(".player-creation").hide();
   $(".score-card").hide();
   //the timeout just keeps the spinner up for half a second... I think it feels nicer than the courses plopping into existance
-  setTimeout(function(){showCourses();}, 500);
-
+  setTimeout(function() {
+    showCourses();
+  }, 500);
 }
 
 function showCourses() {
@@ -22,6 +23,7 @@ function showCourses() {
     console.log(coursesAPI);
     courses = coursesAPI.courses;
     console.log("courses", courses);
+    $(".course-card-container").html("");
 
     for (let i = 0; i < courses.length; i++) {
       $(".course-card-container").append(`
@@ -51,8 +53,6 @@ function showCourses() {
 
   $(".course-selection-title").show("fade", {}, 750);
   $(".course-card-container").show("fade", {}, 750);
-
-
 }
 
 //function that will show the player creation area after a course is selected
@@ -72,6 +72,29 @@ function showPlayers(courseId) {
     );
   });
 }
+
+//stuff for table Dialog
+var dialog = document.querySelector("dialog");
+var showDialogButton = document.querySelector("#change-course-dialog");
+if (!dialog.showModal) {
+  dialogPolyfill.registerDialog(dialog);
+}
+showDialogButton.addEventListener("click", function() {
+  //move courses into modal
+  $(".course-card-container").appendTo(".mdl-dialog__content");
+  showCourses();
+  $(".course-selection-title").remove();
+  $(".player-creation").remove();
+  dialog.showModal();
+  // $(".course-card-container").show();
+  $(".mdl-card").on("click", function() {
+    
+  });
+});
+dialog.querySelector(".close").addEventListener("click", function() {
+  
+  dialog.close();
+});
 
 function showTable() {
   $(".player-creation-title").effect("drop", {}, 450);
@@ -132,14 +155,6 @@ function showTable() {
           </td>
             `);
   }
-  var dialog = document.querySelector('dialog');
-  var showDialogButton = document.querySelector('#change-course-dialog');
-  showDialogButton.addEventListener('click', function(){
-    dialog.showModal();
-  });
-  dialog.querySelector('.close').addEventListener('click', function(){
-    dialog.close();
-  })
   componentHandler.upgradeDom();
 }
 
