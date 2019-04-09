@@ -23,6 +23,9 @@
 .mdl-card{
   margin-top: 15px;
 }
+.player-list .mdl-list__item{
+  margin-top: 5px;
+}
 
 .player-creation{
   

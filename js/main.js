@@ -29,7 +29,7 @@ function showCourses() {
       $(".course-card-container").append(`
       <div id="mdl-card-${i}" onclick='showPlayers(${
         courses[i].id
-      })' class="mdl-card-image mdl-card mdl-shadow--6dp">
+      })' class="mdl-card-image mdl-card mdl-shadow--24dp">
       <div class="mdl-card__title mdl-card--expand"></div>
       <div class="mdl-card__actions mdl-card--border">
       <span class="mdl-card-image__filename">${courses[i].name}</span>
@@ -269,10 +269,9 @@ function updatePlayerTotal() {
   `);
   // do a little shake to show it was updated
   $("#playerTotal").effect(
-    "shake",
+    "bounce",
     {
-      direction: "up",
-      distance: 1,
+      distance: 5,
       times: 1
     },
     450
