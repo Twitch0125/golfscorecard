@@ -38,6 +38,8 @@ function showCourses() {
       `);
       //animate new courses
       $(`#mdl-card-${i}`).css("background", `url(${courses[i].image})`);
+      $(`#mdl-card-${i}`).css("background-position", "center");
+
       $(`#mdl-card-${i}`).on("click", function(e = courses[i]) {
         $(`#mdl-card-${i}`).effect(
           "drop",
@@ -107,15 +109,28 @@ function showTable() {
       450
     );
   });
+    // reset table for when the table is selected again
+    $(".table-body").html('');
+    $(".table-head").html(`
+    <th class="mdl-data-table__cell--non-numeric">Hole</th>
+    <th class="mdl-data-table__cell--non-numeric">Yardage</th>
+    <th class="mdl-data-table__cell--non-numeric">Handicap</th>
+    <th class="mdl-data-table__cell--non-numeric">PAR</th>
+    `);
+
   // load course name
   $(".score-card h1").html(`${selectedCourse.data.name}`);
   //load player names into the table
   for (let i = 0; i < players.length; i++) {
     $(".table-head").append(`
+
     <th>${players[i]}'s score</th>
       `);
     $(".table-totals").append(`<th id="${players[i]}-total"></th>`);
   }
+
+
+
   //load each hole's number, yardage, handicap, and PAR
   for (let i = 0; i < selectedCourse.data.holeCount; i++) {
     //var for current hole in loop
@@ -144,7 +159,7 @@ function showTable() {
     $(".table-body tr").append(`
           <td class="mdl-data-table__cell--non-numeric">
             <div class="mdl-textfield mdl-js-textfield score-textfield">
-              <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="${
+              <input class="mdl-textfield__input " type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="${
                 players[i]
               }Score">
               <label class="mdl-textfield__label" for="${
@@ -158,6 +173,9 @@ function showTable() {
   componentHandler.upgradeDom();
 }
 
+function getTotal () {
+
+  }
 //returns a promise with the Courses object
 function getCourses() {
   return new Promise((resolve, reject) => {
