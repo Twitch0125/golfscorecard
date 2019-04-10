@@ -75,29 +75,6 @@ function showPlayers(courseId) {
   });
 }
 
-//stuff for table Dialog
-var dialog = document.querySelector("dialog");
-var showDialogButton = document.querySelector("#change-course-dialog");
-if (!dialog.showModal) {
-  dialogPolyfill.registerDialog(dialog);
-}
-showDialogButton.addEventListener("click", function() {
-  //move courses into modal
-  $(".course-card-container").appendTo(".mdl-dialog__content");
-  showCourses();
-  $(".course-selection-title").remove();
-  $(".player-creation").remove();
-  dialog.showModal();
-  // $(".course-card-container").show();
-  $(".mdl-card").on("click", function() {
-    
-  });
-});
-dialog.querySelector(".close").addEventListener("click", function() {
-  
-  dialog.close();
-});
-
 function showTable() {
   $(".player-creation-title").effect("drop", {}, 450);
   $(".player-creation-container").effect("drop", {}, 450, function() {
