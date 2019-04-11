@@ -5,14 +5,40 @@ var players = [];
 
 function main() {
   //load courses when API info is retrieved
-  $(".course-card-container").hide();
-  $(".course-selection-title").hide();
-  $(".player-creation").hide();
-  $(".score-card").hide();
+  // $(".course-selection").hide();
+  // $(".player-creation").hide();
+  // $(".score-card").hide();
+  hideElements(".mdl-spinner");
   //the timeout just keeps the spinner up for half a second... I think it feels nicer than the courses plopping into existance
   setTimeout(function() {
     showCourses();
   }, 500);
+}
+
+//function to hide the main elements: Course-selection, player-creation, score-card, and the mdl-spinner because I needed it
+//optional exception parameter, exception is the jquery element
+function hideElements(exception) {
+  let modules = {
+    courseSelection: ".course-selection",
+    playerCreation: ".player-creation",
+    scoreCard: ".score-card",
+    mdlSpinner: ".mdl-spinner"
+  };
+
+  if (exception) {
+    //find exception in our modules
+    for (let item in modules) {
+      if (modules[item] === exception) {
+        continue;
+      } else {
+        $(modules[item]).hide();
+      }
+    }
+  } else {
+    for (let item in modules) {
+      modules[item].hide();
+    }
+  }
 }
 
 function showCourses() {
@@ -86,9 +112,9 @@ function showTable() {
       450
     );
   });
-    // reset table for when the table is selected again
-    $(".table-body").html('');
-    $(".table-head").html(`
+  // reset table for when the table is selected again
+  $(".table-body").html("");
+  $(".table-head").html(`
     <th class="mdl-data-table__cell--non-numeric">Hole</th>
     <th class="mdl-data-table__cell--non-numeric">Yardage</th>
     <th class="mdl-data-table__cell--non-numeric">Handicap</th>
@@ -105,8 +131,6 @@ function showTable() {
       `);
     $(".table-totals").append(`<th id="${players[i]}-total"></th>`);
   }
-
-
 
   //load each hole's number, yardage, handicap, and PAR
   for (let i = 0; i < selectedCourse.data.holeCount; i++) {
@@ -150,9 +174,7 @@ function showTable() {
   componentHandler.upgradeDom();
 }
 
-function getTotal () {
-
-  }
+function getTotal() {}
 //returns a promise with the Courses object
 function getCourses() {
   return new Promise((resolve, reject) => {
