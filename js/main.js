@@ -36,7 +36,7 @@ function hideElements(exception) {
     }
   } else {
     for (let item in modules) {
-      modules[item].hide();
+      $(modules[item]).hide();
     }
   }
 }
@@ -53,9 +53,9 @@ function showCourses() {
 
     for (let i = 0; i < courses.length; i++) {
       $(".course-card-container").append(`
-      <div id="mdl-card-${i}" onclick='showPlayers(${
+      <div id="mdl-card-${i}" onclick='selectCourse(${
         courses[i].id
-      })' class="mdl-card-image mdl-card mdl-shadow--24dp">
+      }), showPlayers()' class="mdl-card-image mdl-card mdl-shadow--24dp">
       <div class="mdl-card__title mdl-card--expand"></div>
       <div class="mdl-card__actions mdl-card--border">
       <span class="mdl-card-image__filename">${courses[i].name}</span>
@@ -83,12 +83,15 @@ function showCourses() {
   $(".course-card-container").show("fade", {}, 750);
 }
 
-//function that will show the player creation area after a course is selected
-function showPlayers(courseId) {
+function selectCourse(courseId) {
   //get the course that was selected
   getCourse(courseId).then(course => {
     selectedCourse = course;
   });
+}
+
+//function that will show the player creation area after a course is selected
+function showPlayers(courseId) {
   $(".course-selection-title").effect("drop", {}, 450);
   $(".course-card-container").effect("drop", {}, 450, function() {
     $(".player-creation").show(
@@ -124,12 +127,21 @@ function showTable() {
   // load course name
   $(".score-card h1").html(`${selectedCourse.data.name}`);
   //load player names into the table
-  for (let i = 0; i < players.length; i++) {
-    $(".table-head").append(`
-
-    <th>${players[i]}'s score</th>
-      `);
-    $(".table-totals").append(`<th id="${players[i]}-total"></th>`);
+  if (players.length == 0) {
+    $(".table-head").html(`
+    <th class="mdl-data-table__cell--non-numeric">Hole</th>
+    <th class="mdl-data-table__cell--non-numeric">Yardage</th>
+    <th class="mdl-data-table__cell--non-numeric">Handicap</th>
+    <th class="mdl-data-table__cell--non-numeric">PAR</th>
+    `);
+  } else {
+    for (let i = 0; i < players.length; i++) {
+      $(".table-head").append(`
+  
+      <th>${players[i]}'s score</th>
+        `);
+      $(".table-totals").append(`<th id="${players[i]}-total"></th>`);
+    }
   }
 
   //load each hole's number, yardage, handicap, and PAR
@@ -156,20 +168,26 @@ function showTable() {
       `);
   }
   //add textfields for each player
-  for (let i = 0; i < players.length; i++) {
-    $(".table-body tr").append(`
-          <td class="mdl-data-table__cell--non-numeric">
-            <div class="mdl-textfield mdl-js-textfield score-textfield">
-              <input class="mdl-textfield__input " type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="${
-                players[i]
-              }Score">
-              <label class="mdl-textfield__label" for="${
-                players[i]
-              }Score">Score...</label>
-              <span class="mdl-textfield__error">Input is not a number!</span>
-            </div>
-          </td>
-            `);
+  if (players.length == 0) {
+    $(".player-cell").remove;
+    componentHandler.upgradeDom();
+
+  } else {
+    for (let i = 0; i < players.length; i++) {
+      $(".table-body tr").append(`
+            <td class="mdl-data-table__cell--non-numeric player-cell">
+              <div class="mdl-textfield mdl-js-textfield score-textfield">
+                <input class="mdl-textfield__input " type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="${
+                  players[i]
+                }Score">
+                <label class="mdl-textfield__label" for="${
+                  players[i]
+                }Score">Score...</label>
+                <span class="mdl-textfield__error">Input is not a number!</span>
+              </div>
+            </td>
+              `);
+    }
   }
   componentHandler.upgradeDom();
 }

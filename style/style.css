@@ -56,3 +56,7 @@ h3{
 .mdl-layout{
   background-color: white;
 }
+
+#scoreCardButton{
+  margin: 10px 0px;
+}
