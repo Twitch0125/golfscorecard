@@ -160,10 +160,10 @@ function showTable() {
     //insert values into the table
     $(".table-body").append(`
     <tr>
-      <td class="mdl-data-table__cell--non-numeric">${holeNum}</td>
-      <td class="mdl-data-table__cell--non-numeric">${holeYardage}</td>
+      <td class="mdl-data-table__cell--non-numeric hole-total">${holeNum}</td>
+      <td class="mdl-data-table__cell--non-numeric yardage-total">${holeYardage}</td>
       <td class="mdl-data-table__cell--non-numeric">${holeHCP}</td>
-      <td class="mdl-data-table__cell--non-numeric">${holePar}</td>
+      <td class="mdl-data-table__cell--non-numeric par-total">${holePar}</td>
     </tr>
       `);
   }
@@ -171,13 +171,12 @@ function showTable() {
   if (players.length == 0) {
     $(".player-cell").remove;
     componentHandler.upgradeDom();
-
   } else {
     for (let i = 0; i < players.length; i++) {
       $(".table-body tr").append(`
             <td class="mdl-data-table__cell--non-numeric player-cell">
               <div class="mdl-textfield mdl-js-textfield score-textfield">
-                <input class="mdl-textfield__input " type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="${
+                <input class="mdl-textfield__input ${players[i]}Score" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="${
                   players[i]
                 }Score">
                 <label class="mdl-textfield__label" for="${
@@ -189,10 +188,35 @@ function showTable() {
               `);
     }
   }
+
+  //total all scores
+  getTotal();
   componentHandler.upgradeDom();
 }
 
-function getTotal() {}
+function getTotal() {
+  let yardageTotal = 0;
+  let parTotal = 0;
+  // calculate yardage and par totals
+  for (let i = 0; i < $(".yardage-total").length; i++) {
+    yardageTotal += parseInt($(".yardage-total")[i].innerHTML);
+  }
+
+  for (let i = 0; i < $(".par-total").length; i++) {
+    parTotal += parseInt($(".par-total")[i].innerHTML);
+  }
+
+  // for(let i = 0; i < players.length; i++){
+  //   for(let j = 0; j < $(`$(".${players[i]}Score`); j++){
+
+  //   }
+  // }
+
+  $("#hole-total").html($(".hole-total").length);
+  $("#yardage-total").html(yardageTotal);
+  $("#par-total").html(parTotal);
+}
+
 //returns a promise with the Courses object
 function getCourses() {
   return new Promise((resolve, reject) => {
