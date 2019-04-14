@@ -176,9 +176,11 @@ function showTable() {
       $(".table-body tr").append(`
             <td class="mdl-data-table__cell--non-numeric player-cell">
               <div class="mdl-textfield mdl-js-textfield score-textfield">
-                <input class="mdl-textfield__input ${players[i]}Score" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="${
+                <input class="mdl-textfield__input ${
                   players[i]
-                }Score">
+                }Score" onblur="getPlayerTotal('${
+        players[i]
+      }')" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="${players[i]}Score">
                 <label class="mdl-textfield__label" for="${
                   players[i]
                 }Score">Score...</label>
@@ -194,9 +196,28 @@ function showTable() {
   componentHandler.upgradeDom();
 }
 
-function getTotal() {
+function getPlayerTotal(player) {
+  let playerScore = 0;
+
+  for (let i = 0; i < $(`.${player}Score`).length; i++) {
+    let playerValue = $(`.${player}Score`)[i].value;
+    console.log(playerValue, "playerValue");
+    playerValue = parseInt(playerValue);
+    console.log(playerValue, "playerValue parsed");
+    if (playerValue == NaN || playerValue == undefined) {
+      break;
+    } else {
+      playerScore += playerValue;
+      console.log(playerScore, "playerScore End");
+    }
+  }
+  $(`#${player}-total`).html(playerScore);
+}
+
+function getTotal(player, score) {
   let yardageTotal = 0;
   let parTotal = 0;
+
   // calculate yardage and par totals
   for (let i = 0; i < $(".yardage-total").length; i++) {
     yardageTotal += parseInt($(".yardage-total")[i].innerHTML);
@@ -205,12 +226,6 @@ function getTotal() {
   for (let i = 0; i < $(".par-total").length; i++) {
     parTotal += parseInt($(".par-total")[i].innerHTML);
   }
-
-  // for(let i = 0; i < players.length; i++){
-  //   for(let j = 0; j < $(`$(".${players[i]}Score`); j++){
-
-  //   }
-  // }
 
   $("#hole-total").html($(".hole-total").length);
   $("#yardage-total").html(yardageTotal);
