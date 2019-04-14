@@ -201,15 +201,14 @@ function getPlayerTotal(player) {
 
   for (let i = 0; i < $(`.${player}Score`).length; i++) {
     let playerValue = $(`.${player}Score`)[i].value;
+    if(playerValue == ''){
+      break;
+    }
     console.log(playerValue, "playerValue");
     playerValue = parseInt(playerValue);
     console.log(playerValue, "playerValue parsed");
-    if (playerValue == NaN || playerValue == undefined) {
-      break;
-    } else {
-      playerScore += playerValue;
-      console.log(playerScore, "playerScore End");
-    }
+    playerScore += playerValue;
+    console.log(playerScore, "playerScore End");
   }
   $(`#${player}-total`).html(playerScore);
 }
